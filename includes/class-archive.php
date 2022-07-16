@@ -35,11 +35,13 @@ class WoocommerceIR_SMS_Archive_List_Table extends WP_List_Table {
 			case 'reciever':
 				return '<div style="direction:ltr !important;text-align:' . $align . ';">' . $item[ $column_name ] . '</div>';
 			default:
-				if ( is_string( $item[ $column_name ] ) ) {
-					return nl2br( $item[ $column_name ] );
+				$default_value = nl2br( $item[ $column_name ] );
+
+				if ( ! is_string( $item[ $column_name ] ) ) {
+					$default_value = print_r( $item[ $column_name ], true );
 				}
 
-				return print_r( $item[ $column_name ], true );
+				return apply_filters( 'pwoosms_archive_list_column_default', $default_value, $column_name, $item );
 		}
 	}
 
@@ -216,7 +218,7 @@ class WoocommerceIR_SMS_Archive_List_Table extends WP_List_Table {
 	}
 
 	public function get_columns(): array {
-		return array(
+		$columns = array(
 			'cb'       => '<input type="checkbox" />',
 			'date'     => 'زمان',
 			'post_id'  => 'سفارش / محصول',
@@ -226,6 +228,7 @@ class WoocommerceIR_SMS_Archive_List_Table extends WP_List_Table {
 			'sender'   => 'وبسرویس',
 			'result'   => 'نتیجه وبسرویس',
 		);
+		return apply_filters( 'pwoosms_archive_list_columns', $columns );
 	}
 
 	public function get_sortable_columns(): array {
