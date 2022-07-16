@@ -293,15 +293,15 @@ class WoocommerceIR_SMS_Archive_List_Table extends WP_List_Table {
 	private function table_exists() {
 		global $wpdb;
 
-		return intval( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', self::table() ) ) );
+		return self::table() == $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', self::table() ) );
 	}
 
 	private function get_query( $count = false ) {
 		global $wpdb;
 
-		$select = $count ? 'count(*)' : '*';
+		$select = $count ? 'COUNT(*)' : '*';
 
-		$sql = $wpdb->prepare( 'SELECT %s FROM %s', $select, self::table() );
+		$sql = "SELECT $select FROM " . self::table();
 
 		if ( isset( $_REQUEST['s'] ) ) {
 			$s    = ltrim( sanitize_text_field( $_REQUEST['s'] ), '0' );
