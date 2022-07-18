@@ -173,7 +173,7 @@ class WoocommerceIR_SMS_Archive_List_Table extends WP_List_Table {
 				break;
 
 			default:
-				$value = '';
+				$value = apply_filters( 'pwoosms_archive_list_column_type', '', $item );
 		}
 
 		return $value;
