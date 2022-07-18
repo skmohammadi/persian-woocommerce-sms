@@ -333,9 +333,13 @@ class WoocommerceIR_SMS_Archive_List_Table extends WP_List_Table {
 			return array();
 		}
 
-		$query = $this->get_query();
-		// $query .= $wpdb->prepare("LIMIT %d" , $per_page);
-		// $query .= $wpdb->prepare(" OFFSET ( %d - 1 ) * %d" , $page_number , $per_page);
+		$offset = ( $page_number - 1 ) * $per_page;
+
+		$query   = array();
+		$query[] = $this->get_query();
+		$query[] = $wpdb->prepare( 'LIMIT %d', $per_page );
+		$query[] = $wpdb->prepare( 'OFFSET %d', $offset );
+		$query = implode( ' ', $query );
 
 		return $wpdb->get_results( $query, 'ARRAY_A' );
 	}
